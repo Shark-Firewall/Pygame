@@ -16,6 +16,10 @@ pygame.display.set_caption("Space Invader")
 icon = pygame.image.load("ufo.png")
 pygame.display.set_icon(icon)
 
+# ------------------------------- BACKGROUND IMAGE ----------------------------------
+
+backgroundImg = pygame.image.load("space_invader_background.jpg")
+
 # ------------------------------- PLAYER SECTION -------------------------------------
 # Adding player on the screen
 playerImg = pygame.image.load("player.png")
@@ -41,13 +45,14 @@ enemyImg = pygame.image.load("alien.png")
 enemyX = random.randint(0, 436)
 enemyY = random.randint(40, 436)
 
-enemyX_changes = 0
-enemyY_changes = 0
+enemyX_changes = 0.3
+enemyY_changes = 40
 
 
 # Adding image on others
 def Enemy(x, y):
-    window.blit(enemyImg, (x, y))
+    window.blit(enemyImg, (x, y))  # parameters --> ( image, ( X Starting Point, Y Starting Point))
+
 
 
 # Making sure the window running for a time until we close the window
@@ -56,7 +61,10 @@ while running:
 
     # Adding background color -- Here window mean which window or screen we are targeting
     window.fill((0, 0, 0))
+    # Ading background Image
+    window.blit(backgroundImg,(0,0));
 
+# ------------------------------- EVENT HANDLING ------------------------------
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -66,22 +74,23 @@ while running:
             # Key Setting for Horizontal Movement
             if event.key == pygame.K_LEFT:
                 print("Right Key pressed")
-                playerX_changes = -0.1
+                playerX_changes = -0.4
             if event.key == pygame.K_RIGHT:
                 print("Left key pressed")
-                playerX_changes = 0.1
+                playerX_changes = 0.4
             # Key Setting for vertical Movement
             if event.key == pygame.K_UP:
                 print("Up Key Pressed")
-                playerY_changes = -0.1
+                playerY_changes = -0.4
             if event.key == pygame.K_DOWN:
                 print("Down Key Pressed")
-                playerY_changes = 0.1
+                playerY_changes = 0.4
         if event.type == pygame.KEYUP:
             print("Keystroke up")
             if (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT):
                 playerX_changes = 0
 
+# -------------------------------------- PLAYER MOVEMENT -------------------------
     # Creating boundary condition for horizontal Movement
     if (playerX <= 0):
         playerX = 0
@@ -96,6 +105,18 @@ while running:
 
     playerX += playerX_changes
     playerY += playerY_changes
+
+# ------------------------------------- ENEMY MOVEMENT --------------------------------
+    # Enemy Movement
+    if (enemyX <= 0):
+        enemyX_changes = 0.3
+        enemyY += enemyY_changes
+    elif (enemyX >= 436 ):
+        enemyX_changes = -0.3
+        enemyY += enemyY_changes
+
+    enemyX += enemyX_changes
+
     Player(playerX, playerY);
     Enemy(enemyX, enemyY)
     pygame.display.update()
